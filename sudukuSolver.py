@@ -7,7 +7,7 @@
 import numpy as ny
 import math
 
-# Generic implementation of a backtrack algorithm.
+# Backtracking implementation.
 def backtrack(board, currentSpace, emptySpaces):
 	# If the current partial solution is a complete solution, process it.
 	if isSolution(board, emptySpaces):
@@ -20,6 +20,9 @@ def backtrack(board, currentSpace, emptySpaces):
 		for currentCandidate in candidates:
 			board, emptySpaces = stepForward(currentCandidate, currentSpace, board, emptySpaces)
 			backtrack(board, currentSpace, emptySpaces)
+			# If solution is found, end the recursion
+			if isFinished:
+				return
 			board, emptySpaces = stepBackward(currentSpace, board, emptySpaces)
 
 # Function that determines if the given partial solution is a complete solution.
@@ -29,7 +32,9 @@ def isSolution(board, emptySpaces):
 
 # Function that prints the final solution of the board.
 def printSolution(board):
+	global isFinished
 	# Print the current solution
+	isFinished = True
 	print board
 	return
 
@@ -120,4 +125,8 @@ def solveSuduku(filename):
 # Execution code
 squareDim = 3
 boardDim = 9
-solveSuduku("puzzle.txt")
+isFinished = False
+# Get puzzle file name from user
+puzzleFile = raw_input('Please enter the puzzle filename (with .txt ext): ')
+# Call solver
+solveSuduku(puzzleFile)
